@@ -104,3 +104,15 @@ export function isEmpty(value: unknown): boolean {
   return false;
 }
 
+/**
+ * Convert a string to a URL-friendly slug
+ */
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric with hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+}
+
