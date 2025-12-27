@@ -5,11 +5,11 @@
 | Phase | Status | Tasks |
 |-------|--------|-------|
 | Phase 1: Foundation | ✅ Complete | TASK-01 ✅, TASK-02 ✅, TASK-03 ✅, TASK-04 ✅ |
-| Phase 2: Core | 🔄 In Progress | TASK-05 ✅, TASK-06, TASK-07 |
+| Phase 2: Core | 🔄 In Progress | TASK-05 ✅, TASK-06 ✅, TASK-07 |
 | Phase 3: Features | ⏳ Pending | TASK-08, TASK-09, TASK-10, TASK-11, TASK-12, TASK-13 |
 | Phase 4: Polish | ⏳ Pending | TASK-14, TASK-15, TASK-16 |
 
-**Overall Progress:** 5/16 tasks completed (31%)
+**Overall Progress:** 6/16 tasks completed (38%)
 
 ---
 
@@ -525,12 +525,55 @@ expect(pdfResult.transactions.length).toBeGreaterThan(0);
 - `src/components/common/confirm-dialog.tsx`
 
 ### Acceptance Criteria
-- [ ] All components use shadcn/ui as base
-- [ ] Components are responsive (mobile-first)
-- [ ] Dark mode works correctly
-- [ ] Loading states implemented
-- [ ] Empty states implemented
-- [ ] Components are properly typed
+- [x] All components use shadcn/ui as base
+- [x] Components are responsive (mobile-first)
+- [x] Dark mode works correctly
+- [x] Loading states implemented
+- [x] Empty states implemented
+- [x] Components are properly typed
+
+### Completion Notes
+- **Completed:** December 27, 2025
+- **Branch:** `feature/task-06-ui-components`
+- **PR:** #7
+- **Files Created:**
+  - `src/components/common/confirm-dialog.tsx` - Confirmation dialog wrapper
+  - `src/components/common/currency-display.tsx` - Currency formatting with color coding
+  - `src/components/common/date-display.tsx` - Date formatting with relative dates
+  - `src/components/common/empty-state.tsx` - Reusable empty state component
+  - `src/components/common/loading-spinner.tsx` - Loading indicators and skeletons
+  - `src/components/common/month-selector.tsx` - Month/year selector
+  - `src/components/layout/page-header.tsx` - Reusable page header
+  - `src/components/dashboard/summary-cards.tsx` - Four summary cards (Income, Expenses, Balance, Budget)
+  - `src/components/dashboard/category-chart.tsx` - Recharts donut chart for category spending
+  - `src/components/dashboard/budget-progress.tsx` - Budget list with progress bars
+  - `src/components/dashboard/alerts-list.tsx` - Unread alerts display
+  - `src/components/dashboard/recent-transactions.tsx` - Last 5-10 transactions list
+  - `src/components/transactions/transaction-row.tsx` - Single transaction row in table
+  - `src/components/transactions/transaction-filters.tsx` - Filter controls (month, category, type, search)
+  - `src/components/transactions/category-picker.tsx` - Category selector with hierarchy
+  - `src/components/transactions/transaction-detail.tsx` - Transaction detail/edit modal
+  - `src/components/transactions/transaction-list.tsx` - Full transaction list with pagination
+  - `src/components/transactions/bulk-actions.tsx` - Bulk operations toolbar
+  - `src/components/ui/checkbox.tsx` - Checkbox component
+  - `src/components/ui/textarea.tsx` - Textarea component
+  - `src/hooks/use-dashboard.ts` - Dashboard data fetching hook
+  - `src/hooks/use-transactions.ts` - Transaction list with mutations hook
+  - `src/hooks/use-budgets.ts` - Budget data with mutations hook
+  - `src/hooks/use-categories.ts` - Category list fetching hook
+- **Statistics:**
+  - 25 files created/modified
+  - 2,267 lines of code added
+  - 0 linting errors
+- **Features:**
+  - All components use shadcn/ui as base
+  - Responsive (mobile-first) design
+  - Dark mode compatible
+  - Loading and empty states implemented
+  - Fully TypeScript typed
+  - Brazilian formatting (currency, dates)
+  - React Query integration for data fetching
+  - Components ready for TASK-08 (Import Flow UI) and TASK-09 (Dashboard)
 
 ---
 
@@ -912,7 +955,7 @@ TASK-01 ────────────────────────
 ### Phase 2: Core (Week 2) 🔄 In Progress
 ```
 TASK-05 (Core API) ────────────────────────► ✅ Complete
-TASK-06 (UI Components) ───────────────────► ⏳ Pending
+TASK-06 (UI Components) ───────────────────► ✅ Complete
 TASK-07 (Import Backend) ──────────────────► ⏳ Pending
 ```
 
