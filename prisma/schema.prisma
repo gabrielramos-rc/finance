@@ -1,0 +1,308 @@
+// prisma/schema.prisma
+// Finance - Personal Finance Management System
+// Database Schema v1.0
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// USER
+// ============================================================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  transactions    Transaction[]
+  accounts        Account[]
+  creditCards     CreditCard[]
+  categories      Category[]
+  budgets         Budget[]
+  subscriptions   Subscription[]
+  installments    Installment[]
+  imports         Import[]
+  alerts          Alert[]
+  categorizeRules CategorizeRule[]
+
+  @@map("users")
+}
+
+// ============================================================================
+// ACCOUNTS & CARDS
+// ============================================================================
+
+model Account {
+  id             String   @id @default(uuid())
+  userId         String
+  bankName       String
+  accountType    String // checking, savings, investment
+  lastFourDigits String?
+  currentBalance Decimal  @default(0) @db.Decimal(15, 2)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model CreditCard {
+  id             String   @id @default(uuid())
+  userId         String
+  bankName       String
+  cardName       String // VISA Infinite, ELO Nanquim
+  lastFourDigits String
+  closingDay     Int // Dia de fechamento (1-31)
+  dueDay         Int // Dia de vencimento (1-31)
+  limit          Decimal  @db.Decimal(15, 2)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  installments Installment[]
+
+  @@index([userId])
+  @@map("credit_cards")
+}
+
+// ============================================================================
+// CATEGORIES
+// ============================================================================
+
+model Category {
+  id        String   @id @default(uuid())
+  userId    String? // null = system category
+  name      String
+  slug      String
+  type      String // fixed, variable, income, transfer, investment, subscription, system
+  icon      String?
+  color     String?
+  parentId  String? // For subcategories
+  isSystem  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user            User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent          Category?        @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children        Category[]       @relation("CategoryHierarchy")
+  transactions    Transaction[]
+  budgets         Budget[]
+  subscriptions   Subscription[]
+  installments    Installment[]
+  categorizeRules CategorizeRule[]
+
+  @@unique([userId, slug])
+  @@index([userId])
+  @@index([parentId])
+  @@map("categories")
+}
+
+// ============================================================================
+// TRANSACTIONS
+// ============================================================================
+
+model Transaction {
+  id           String    @id @default(uuid())
+  userId       String
+  date         DateTime  @db.Date
+  description  String
+  originalDesc String // Descrição original do banco
+  amount       Decimal   @db.Decimal(15, 2) // Positivo = entrada, Negativo = saída
+  type         String // income, expense, transfer
+  categoryId   String?
+  accountId    String?
+  creditCardId String?
+  isRecurring  Boolean   @default(false)
+  isIgnored    Boolean   @default(false) // Ignorar em cálculos (ex: transferência própria)
+  notes        String?
+  importId     String?
+  metadata     Json      @default("{}") // Dados extras do parser
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category?   @relation(fields: [categoryId], references: [id])
+  account    Account?    @relation(fields: [accountId], references: [id])
+  creditCard CreditCard? @relation(fields: [creditCardId], references: [id])
+  import     Import?     @relation(fields: [importId], references: [id])
+
+  @@index([userId, date])
+  @@index([userId, categoryId])
+  @@index([userId, type, date])
+  @@index([importId])
+  @@map("transactions")
+}
+
+// ============================================================================
+// BUDGETS
+// ============================================================================
+
+model Budget {
+  id         String   @id @default(uuid())
+  userId     String
+  categoryId String
+  month      DateTime @db.Date // Primeiro dia do mês
+  limit      Decimal  @db.Decimal(15, 2)
+  alertAt50  Boolean  @default(true)
+  alertAt80  Boolean  @default(true)
+  alertAt100 Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([userId, categoryId, month])
+  @@index([userId, month])
+  @@map("budgets")
+}
+
+// ============================================================================
+// SUBSCRIPTIONS
+// ============================================================================
+
+model Subscription {
+  id              String    @id @default(uuid())
+  userId          String
+  name            String
+  amount          Decimal   @db.Decimal(15, 2)
+  frequency       String // monthly, annual
+  categoryId      String?
+  nextBillingDate DateTime? @db.Date
+  sharedWith      Json      @default("[]") // [{name: "João", amount: 20}]
+  status          String    @default("active") // active, evaluate, cancelled
+  notes           String?
+  detectedFrom    String? // Merchant name que originou
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+// ============================================================================
+// INSTALLMENTS
+// ============================================================================
+
+model Installment {
+  id                 String   @id @default(uuid())
+  userId             String
+  description        String
+  totalAmount        Decimal  @db.Decimal(15, 2)
+  installmentAmount  Decimal  @db.Decimal(15, 2)
+  currentInstallment Int
+  totalInstallments  Int
+  startDate          DateTime @db.Date
+  endDate            DateTime @db.Date
+  creditCardId       String?
+  categoryId         String?
+  status             String   @default("active") // active, completed, cancelled
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creditCard CreditCard? @relation(fields: [creditCardId], references: [id])
+  category   Category?   @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("installments")
+}
+
+// ============================================================================
+// IMPORTS
+// ============================================================================
+
+model Import {
+  id                String   @id @default(uuid())
+  userId            String
+  fileName          String
+  fileType          String // csv-account, pdf-visa, pdf-elo
+  period            String // "2025-11" (YYYY-MM)
+  status            String   @default("pending") // pending, processing, completed, failed
+  transactionsCount Int      @default(0)
+  newCount          Int      @default(0)
+  duplicateCount    Int      @default(0)
+  errors            Json     @default("[]")
+  createdAt         DateTime @default(now())
+
+  // Relations
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@map("imports")
+}
+
+// ============================================================================
+// ALERTS
+// ============================================================================
+
+model Alert {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String // budget_50, budget_80, budget_100, unknown_merchant, import_complete
+  title     String
+  message   String
+  data      Json     @default("{}")
+  isRead    Boolean  @default(false)
+  sentVia   String[] @default([]) // ["email", "telegram", "push"]
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("alerts")
+}
+
+// ============================================================================
+// CATEGORIZATION RULES
+// ============================================================================
+
+model CategorizeRule {
+  id         String   @id @default(uuid())
+  userId     String
+  pattern    String // Regex ou texto simples
+  matchType  String // contains, startsWith, regex
+  categoryId String
+  priority   Int      @default(0) // Maior = mais prioritário
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId, isActive])
+  @@map("categorize_rules")
+}
+
