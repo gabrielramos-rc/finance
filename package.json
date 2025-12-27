@@ -8,9 +8,17 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "postinstall": "prisma generate || true"
+    "postinstall": "prisma generate || true",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -32,6 +40,7 @@
     "next": "^16.1.1",
     "papaparse": "^5.5.3",
     "pdf-parse": "^2.4.5",
+    "pg": "^8.16.3",
     "prisma": "^7.2.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
@@ -44,12 +53,14 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.10.2",
     "@types/papaparse": "^5.5.2",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "eslint": "^9.17.0",
     "eslint-config-next": "^16.1.1",
     "postcss": "^8.4.49",
     "tailwindcss": "^4.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.7.2"
   },
   "packageManager": "pnpm@9.15.1",
