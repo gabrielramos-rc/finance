@@ -5,11 +5,11 @@
 | Phase | Status | Tasks |
 |-------|--------|-------|
 | Phase 1: Foundation | ✅ Complete | TASK-01 ✅, TASK-02 ✅, TASK-03 ✅, TASK-04 ✅ |
-| Phase 2: Core | ⏳ Pending | TASK-05, TASK-06, TASK-07 |
+| Phase 2: Core | 🔄 In Progress | TASK-05 ✅, TASK-06 ✅, TASK-07 |
 | Phase 3: Features | ⏳ Pending | TASK-08, TASK-09, TASK-10, TASK-11, TASK-12, TASK-13 |
 | Phase 4: Polish | ⏳ Pending | TASK-14, TASK-15, TASK-16 |
 
-**Overall Progress:** 4/16 tasks completed (25%)
+**Overall Progress:** 6/16 tasks completed (38%)
 
 ---
 
@@ -205,9 +205,9 @@ pnpm prisma db seed
 ### Acceptance Criteria
 - [x] All models created per docs/DATABASE.md
 - [x] Prisma client generates without errors
-- [ ] Database syncs successfully (requires Supabase credentials)
-- [ ] Categories seeded from config/categories.yaml (requires database connection)
-- [ ] `pnpm prisma studio` opens and shows tables (requires database connection)
+- [x] Database syncs successfully (Supabase connected)
+- [x] Categories seeded from config/categories.yaml (108 categories seeded)
+- [x] `pnpm prisma studio` opens and shows tables (verified)
 
 ### Completion Notes
 - **Completed:** December 26, 2025
@@ -223,6 +223,12 @@ pnpm prisma db seed
   - `src/lib/prisma.ts` - Prisma client singleton
   - `src/types/database.ts` - TypeScript types for JSON fields
   - `.env.example` - Environment template
+- **Database Setup (December 27, 2025):**
+  - All 11 tables created in Supabase
+  - 108 system categories seeded successfully
+  - RLS policies created (see `prisma/migrations/enable-rls.sql`)
+  - Database setup scripts created (`scripts/setup-db.js`, `scripts/seed-db.js`, `scripts/enable-rls.js`)
+  - PR #6 merged: Database setup with RLS policies
 
 ---
 
@@ -260,7 +266,7 @@ pnpm prisma db seed
 ### Completion Notes
 - **Completed:** December 26, 2025
 - **Branch:** `feature/task-03-authentication`
-- **PR:** #3
+- **PR:** #3 (merged)
 - **Files Created:**
   - `src/lib/supabase/client.ts` - Browser client for Supabase
   - `src/lib/supabase/server.ts` - Server client for Supabase
@@ -338,7 +344,7 @@ expect(pdfResult.transactions.length).toBeGreaterThan(0);
 ### Completion Notes
 - **Completed:** December 26, 2025
 - **Branch:** `feature/task-04-parsers`
-- **PR:** #4
+- **PR:** #4 (merged)
 - **Files Created:**
   - `src/lib/parsers/types.ts` - TypeScript interfaces for parsed data
   - `src/lib/parsers/csv-parser.ts` - Banco do Brasil CSV parser (ISO-8859-1)
@@ -419,11 +425,58 @@ expect(pdfResult.transactions.length).toBeGreaterThan(0);
 - `src/app/api/rules/route.ts` - GET, POST, DELETE
 
 ### Acceptance Criteria
-- [ ] All endpoints per docs/API.md implemented
-- [ ] Endpoints require authentication
-- [ ] Input validation with clear error messages
-- [ ] Consistent error response format
-- [ ] Pagination working on list endpoints
+- [x] All endpoints per docs/API.md implemented
+- [x] Endpoints require authentication
+- [x] Input validation with clear error messages
+- [x] Consistent error response format
+- [x] Pagination working on list endpoints
+
+### Completion Notes
+- **Completed:** December 27, 2025
+- **Branch:** `feature/task-05-core-api`
+- **PR:** #5 (merged)
+- **Files Created:**
+  - `src/lib/api/auth.ts` - Authentication utilities and error handling
+  - `src/lib/api/validation.ts` - Input validation utilities
+  - `src/lib/db/repositories/transaction.ts` - Transaction repository with filtering
+  - `src/lib/db/repositories/category.ts` - Category repository with hierarchy
+  - `src/lib/db/repositories/budget.ts` - Budget repository
+  - `src/lib/db/repositories/subscription.ts` - Subscription repository
+  - `src/lib/db/repositories/installment.ts` - Installment repository with projections
+  - `src/lib/db/repositories/alert.ts` - Alert repository
+  - `src/lib/db/repositories/user-settings.ts` - User settings repository
+  - `src/app/api/transactions/route.ts` - GET, POST transactions
+  - `src/app/api/transactions/[id]/route.ts` - GET, PATCH, DELETE transaction
+  - `src/app/api/transactions/[id]/categorize/route.ts` - POST categorize with rule creation
+  - `src/app/api/categories/route.ts` - GET, POST categories
+  - `src/app/api/budgets/route.ts` - GET budgets
+  - `src/app/api/budgets/[categoryId]/route.ts` - PUT budget
+  - `src/app/api/subscriptions/route.ts` - GET, POST subscriptions
+  - `src/app/api/subscriptions/[id]/route.ts` - PATCH subscription
+  - `src/app/api/installments/route.ts` - GET installments
+  - `src/app/api/dashboard/route.ts` - GET dashboard data
+  - `src/app/api/alerts/route.ts` - GET alerts
+  - `src/app/api/alerts/[id]/read/route.ts` - PATCH mark alert as read
+  - `src/app/api/settings/route.ts` - GET, PATCH settings
+  - `src/app/api/rules/route.ts` - GET, POST rules
+  - `src/app/api/rules/[id]/route.ts` - DELETE rule
+- **Features:**
+  - Repository pattern implemented for all data access
+  - Authentication required on all endpoints via `requireAuth()`
+  - Consistent error handling with `ApiError` class
+  - Input validation for month format, UUIDs, pagination, transaction types
+  - Pagination support on all list endpoints
+  - Type-safe with TypeScript throughout
+  - Hierarchical category structure support
+  - Budget calculations with summaries
+  - Subscription summaries (monthly/annual)
+  - Installment projections
+  - Dashboard consolidated data endpoint
+- **Statistics:**
+  - 7 repositories created
+  - 15+ API endpoints implemented
+  - 2,253+ lines of code added
+  - 0 linting errors
 
 ---
 
@@ -472,12 +525,55 @@ expect(pdfResult.transactions.length).toBeGreaterThan(0);
 - `src/components/common/confirm-dialog.tsx`
 
 ### Acceptance Criteria
-- [ ] All components use shadcn/ui as base
-- [ ] Components are responsive (mobile-first)
-- [ ] Dark mode works correctly
-- [ ] Loading states implemented
-- [ ] Empty states implemented
-- [ ] Components are properly typed
+- [x] All components use shadcn/ui as base
+- [x] Components are responsive (mobile-first)
+- [x] Dark mode works correctly
+- [x] Loading states implemented
+- [x] Empty states implemented
+- [x] Components are properly typed
+
+### Completion Notes
+- **Completed:** December 27, 2025
+- **Branch:** `feature/task-06-ui-components`
+- **PR:** #7
+- **Files Created:**
+  - `src/components/common/confirm-dialog.tsx` - Confirmation dialog wrapper
+  - `src/components/common/currency-display.tsx` - Currency formatting with color coding
+  - `src/components/common/date-display.tsx` - Date formatting with relative dates
+  - `src/components/common/empty-state.tsx` - Reusable empty state component
+  - `src/components/common/loading-spinner.tsx` - Loading indicators and skeletons
+  - `src/components/common/month-selector.tsx` - Month/year selector
+  - `src/components/layout/page-header.tsx` - Reusable page header
+  - `src/components/dashboard/summary-cards.tsx` - Four summary cards (Income, Expenses, Balance, Budget)
+  - `src/components/dashboard/category-chart.tsx` - Recharts donut chart for category spending
+  - `src/components/dashboard/budget-progress.tsx` - Budget list with progress bars
+  - `src/components/dashboard/alerts-list.tsx` - Unread alerts display
+  - `src/components/dashboard/recent-transactions.tsx` - Last 5-10 transactions list
+  - `src/components/transactions/transaction-row.tsx` - Single transaction row in table
+  - `src/components/transactions/transaction-filters.tsx` - Filter controls (month, category, type, search)
+  - `src/components/transactions/category-picker.tsx` - Category selector with hierarchy
+  - `src/components/transactions/transaction-detail.tsx` - Transaction detail/edit modal
+  - `src/components/transactions/transaction-list.tsx` - Full transaction list with pagination
+  - `src/components/transactions/bulk-actions.tsx` - Bulk operations toolbar
+  - `src/components/ui/checkbox.tsx` - Checkbox component
+  - `src/components/ui/textarea.tsx` - Textarea component
+  - `src/hooks/use-dashboard.ts` - Dashboard data fetching hook
+  - `src/hooks/use-transactions.ts` - Transaction list with mutations hook
+  - `src/hooks/use-budgets.ts` - Budget data with mutations hook
+  - `src/hooks/use-categories.ts` - Category list fetching hook
+- **Statistics:**
+  - 25 files created/modified
+  - 2,267 lines of code added
+  - 0 linting errors
+- **Features:**
+  - All components use shadcn/ui as base
+  - Responsive (mobile-first) design
+  - Dark mode compatible
+  - Loading and empty states implemented
+  - Fully TypeScript typed
+  - Brazilian formatting (currency, dates)
+  - React Query integration for data fetching
+  - Components ready for TASK-08 (Import Flow UI) and TASK-09 (Dashboard)
 
 ---
 
@@ -847,39 +943,39 @@ expect(pdfResult.transactions.length).toBeGreaterThan(0);
 
 ## Execution Order (Optimal)
 
-### Phase 1: Foundation (Week 1)
+### Phase 1: Foundation (Week 1) ✅ Complete
 ```
 TASK-01 ──────────────────────────────────────► ✅ Complete
     │
     ├── TASK-02 (Database) ────────────────► ✅ Complete
-    ├── TASK-03 (Auth) ────────────────────► 🔄 Ready
-    └── TASK-04 (Parsers) ─────────────────► 🔄 Ready
+    ├── TASK-03 (Auth) ────────────────────► ✅ Complete
+    └── TASK-04 (Parsers) ─────────────────► ✅ Complete
 ```
 
-### Phase 2: Core (Week 2)
+### Phase 2: Core (Week 2) 🔄 In Progress
 ```
-TASK-05 (Core API) ────────────────────────► Pending
-TASK-06 (UI Components) ───────────────────► Pending
-TASK-07 (Import Backend) ──────────────────► Pending
+TASK-05 (Core API) ────────────────────────► ✅ Complete
+TASK-06 (UI Components) ───────────────────► ✅ Complete
+TASK-07 (Import Backend) ──────────────────► ⏳ Pending
 ```
 
-### Phase 3: Features (Week 3)
+### Phase 3: Features (Week 3) ⏳ Pending
 ```
-TASK-08 (Import UI) ───────────────────────► Pending
-TASK-09 (Dashboard) ───────────────────────► Pending
+TASK-08 (Import UI) ───────────────────────► ⏳ Pending
+TASK-09 (Dashboard) ───────────────────────► ⏳ Pending
     │
-    ├── TASK-10 (Transactions) ────────────► Pending
-    ├── TASK-11 (Budgets) ─────────────────► Pending
-    ├── TASK-12 (Subscriptions) ───────────► Pending
-    └── TASK-13 (Installments) ────────────► Pending
+    ├── TASK-10 (Transactions) ────────────► ⏳ Pending
+    ├── TASK-11 (Budgets) ─────────────────► ⏳ Pending
+    ├── TASK-12 (Subscriptions) ───────────► ⏳ Pending
+    └── TASK-13 (Installments) ────────────► ⏳ Pending
 ```
 
-### Phase 4: Polish (Week 4)
+### Phase 4: Polish (Week 4) ⏳ Pending
 ```
-TASK-14 (Settings) ────────────────────────► Pending
+TASK-14 (Settings) ────────────────────────► ⏳ Pending
     │
-    ├── TASK-15 (Telegram) ────────────────► Pending
-    └── TASK-16 (Email Reports) ───────────► Pending
+    ├── TASK-15 (Telegram) ────────────────► ⏳ Pending
+    └── TASK-16 (Email Reports) ───────────► ⏳ Pending
 ```
 
 ---
