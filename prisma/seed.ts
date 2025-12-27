@@ -4,11 +4,22 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse } from 'yaml';
 
-const prisma = new PrismaClient();
+// Initialize Prisma client with adapter (same as src/lib/prisma.ts)
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL environment variable is not set');
+}
+
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 interface CategoryChild {
   name: string;
@@ -52,32 +63,44 @@ async function main() {
     console.log(`\n📁 Processing group: ${group.name}`);
 
     // Create the top-level category
-    const parentCategory = await prisma.category.upsert({
+    // For system categories (userId = null), we need to check if it exists first
+    // since we can't use null in the unique constraint where clause
+    let parentCategory = await prisma.category.findFirst({
       where: {
-        userId_slug: {
-          userId: null as unknown as string, // System category
-          slug: groupSlug,
-        },
-      },
-      update: {
-        name: group.name,
-        icon: group.icon,
-        color: group.color,
-        type: group.type,
-        isSystem: true,
-        sortOrder: sortOrder++,
-      },
-      create: {
-        name: group.name,
         slug: groupSlug,
-        icon: group.icon,
-        color: group.color,
-        type: group.type,
-        isSystem: true,
-        sortOrder: sortOrder++,
         userId: null,
+        isSystem: true,
       },
     });
+
+    if (parentCategory) {
+      // Update existing system category
+      parentCategory = await prisma.category.update({
+        where: { id: parentCategory.id },
+        data: {
+          name: group.name,
+          icon: group.icon,
+          color: group.color,
+          type: group.type,
+          isSystem: true,
+          sortOrder: sortOrder++,
+        },
+      });
+    } else {
+      // Create new system category
+      parentCategory = await prisma.category.create({
+        data: {
+          name: group.name,
+          slug: groupSlug,
+          icon: group.icon,
+          color: group.color,
+          type: group.type,
+          isSystem: true,
+          sortOrder: sortOrder++,
+          userId: null,
+        },
+      });
+    }
 
     categoryCount++;
     console.log(`  ✅ Created/updated: ${group.name}`);
@@ -115,32 +138,43 @@ async function processChildren(
   for (const [childSlug, child] of Object.entries(children)) {
     const fullSlug = `${parentSlug}-${childSlug}`;
 
-    const category = await prisma.category.upsert({
+    // For system categories (userId = null), find first then update or create
+    let category = await prisma.category.findFirst({
       where: {
-        userId_slug: {
-          userId: null as unknown as string,
-          slug: fullSlug,
-        },
-      },
-      update: {
-        name: child.name,
-        icon: child.icon,
-        type: parentType,
-        parentId: parentId,
-        isSystem: true,
-        sortOrder: childOrder++,
-      },
-      create: {
-        name: child.name,
         slug: fullSlug,
-        icon: child.icon,
-        type: parentType,
-        parentId: parentId,
-        isSystem: true,
-        sortOrder: childOrder++,
         userId: null,
+        isSystem: true,
       },
     });
+
+    if (category) {
+      // Update existing system category
+      category = await prisma.category.update({
+        where: { id: category.id },
+        data: {
+          name: child.name,
+          icon: child.icon,
+          type: parentType,
+          parentId: parentId,
+          isSystem: true,
+          sortOrder: childOrder++,
+        },
+      });
+    } else {
+      // Create new system category
+      category = await prisma.category.create({
+        data: {
+          name: child.name,
+          slug: fullSlug,
+          icon: child.icon,
+          type: parentType,
+          parentId: parentId,
+          isSystem: true,
+          sortOrder: childOrder++,
+          userId: null,
+        },
+      });
+    }
 
     console.log(`${indent}📂 ${child.name}`);
 
@@ -166,4 +200,5 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   });
+
 
