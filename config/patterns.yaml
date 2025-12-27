@@ -133,6 +133,10 @@ fixed_patterns:
       - pattern: "SEBASTIANA"
         match_type: "contains"
         priority: 95
+      - pattern: "MARIA TEREZINHA"
+        match_type: "contains"
+        priority: 95
+        description: "Diarista"
       - pattern: "DIARISTA"
         match_type: "contains"
         priority: 80
@@ -159,6 +163,13 @@ investment_patterns:
   consorcio:
     patterns:
       - pattern: "CANOPUS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BB ADMIN CONS"
+        match_type: "contains"
+        priority: 95
+        description: "BB Consórcio"
+      - pattern: "BB CONSORCIO"
         match_type: "contains"
         priority: 95
       - pattern: "CONSORCIO"
@@ -610,6 +621,38 @@ health_patterns:
         match_type: "contains"
         priority: 95
 
+  consultas:
+    patterns:
+      - pattern: "PSICOLOG"
+        match_type: "contains"
+        priority: 95
+      - pattern: "GESTALT"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SEMPRE VIVA"
+        match_type: "contains"
+        priority: 95
+        description: "Clínica de psicologia"
+      - pattern: "AMANDA CASE"
+        match_type: "contains"
+        priority: 95
+        description: "Psicóloga"
+      - pattern: "NUTRI"
+        match_type: "contains"
+        priority: 85
+      - pattern: "FISIOTERAPEUTA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "DENTISTA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "MEDICO"
+        match_type: "contains"
+        priority: 80
+      - pattern: "CLINICA"
+        match_type: "contains"
+        priority: 70
+
 # ============================================================================
 # GASTOS VARIÁVEIS - COMPRAS ONLINE
 # ============================================================================
@@ -803,6 +846,27 @@ beauty_fashion_patterns:
       - pattern: "SPORTCICLE"
         match_type: "contains"
         priority: 90
+
+# ============================================================================
+# FAMÍLIA - Transferências para familiares
+# ============================================================================
+family_patterns:
+  transferencias:
+    patterns:
+      - pattern: "ISABELA SOARES"
+        match_type: "contains"
+        priority: 95
+        description: "Esposa"
+      - pattern: "BEATRIZ"
+        match_type: "contains"
+        priority: 85
+        description: "Irmã"
+      - pattern: "FABIOLA"
+        match_type: "contains"
+        priority: 85
+      - pattern: "ALEXANDRE"
+        match_type: "contains"
+        priority: 85
 
 # ============================================================================
 # TAXAS E ENCARGOS
