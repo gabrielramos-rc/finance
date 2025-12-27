@@ -1,0 +1,464 @@
+# Categorias do Sistema Finance
+# Este arquivo define a hierarquia de categorias para classificação de transações
+
+version: "1.0"
+
+categories:
+  # ============================================================================
+  # CUSTOS FIXOS - Despesas recorrentes obrigatórias
+  # ============================================================================
+  fixos:
+    name: "Custos Fixos"
+    icon: "🏠"
+    color: "#6366F1"
+    type: "fixed"
+    description: "Despesas recorrentes e obrigatórias"
+    children:
+      moradia:
+        name: "Moradia"
+        icon: "🏠"
+        children:
+          aluguel:
+            name: "Aluguel"
+            icon: "🏠"
+          condominio:
+            name: "Condomínio"
+            icon: "🏢"
+          energia:
+            name: "Energia"
+            icon: "⚡"
+          agua:
+            name: "Água"
+            icon: "💧"
+          gas:
+            name: "Gás"
+            icon: "🔥"
+          iptu:
+            name: "IPTU"
+            icon: "📋"
+
+      saude-fixa:
+        name: "Saúde"
+        icon: "🏥"
+        children:
+          plano-saude:
+            name: "Plano de Saúde"
+            icon: "🏥"
+            description: "CASSI, Unimed, etc."
+          seguro-vida:
+            name: "Seguro de Vida"
+            icon: "🛡️"
+            description: "Prudential, etc."
+
+      educacao-fixa:
+        name: "Educação"
+        icon: "🎓"
+        children:
+          mensalidade-escolar:
+            name: "Mensalidade Escolar"
+            icon: "🏫"
+            description: "CEUB, etc."
+          cursos-fixos:
+            name: "Cursos Fixos"
+            icon: "📚"
+
+      servicos-domesticos:
+        name: "Serviços Domésticos"
+        icon: "🧹"
+        children:
+          diarista:
+            name: "Diarista"
+            icon: "🧹"
+
+      telecom:
+        name: "Telecom"
+        icon: "📱"
+        children:
+          celular:
+            name: "Celular"
+            icon: "📱"
+            description: "Vivo, Claro, Tim, etc."
+          internet:
+            name: "Internet"
+            icon: "🌐"
+
+  # ============================================================================
+  # CONSTRUÇÃO DE FUTURO - Investimentos e reservas
+  # ============================================================================
+  futuro:
+    name: "Construção de Futuro"
+    icon: "📈"
+    color: "#10B981"
+    type: "investment"
+    description: "Investimentos e planejamento financeiro"
+    children:
+      consorcio:
+        name: "Consórcio"
+        icon: "🏡"
+      previdencia:
+        name: "Previdência"
+        icon: "👴"
+        description: "Icatu, Brasilprev, etc."
+      investimentos:
+        name: "Investimentos"
+        icon: "💹"
+        children:
+          renda-fixa:
+            name: "Renda Fixa"
+            icon: "📊"
+          renda-variavel:
+            name: "Renda Variável"
+            icon: "📈"
+          cripto:
+            name: "Criptomoedas"
+            icon: "🪙"
+      dizimo:
+        name: "Dízimo"
+        icon: "⛪"
+        description: "Contribuição religiosa"
+
+  # ============================================================================
+  # ASSINATURAS - Serviços recorrentes opcionais
+  # ============================================================================
+  assinaturas:
+    name: "Assinaturas"
+    icon: "🔄"
+    color: "#8B5CF6"
+    type: "subscription"
+    description: "Serviços de assinatura mensal ou anual"
+    children:
+      streaming:
+        name: "Streaming"
+        icon: "📺"
+        description: "Netflix, Disney+, Prime Video, etc."
+      musica:
+        name: "Música"
+        icon: "🎵"
+        description: "Spotify, Apple Music, etc."
+      produtividade:
+        name: "Produtividade"
+        icon: "💻"
+        description: "Claude, GitHub, Notion, etc."
+      educacao:
+        name: "Educação Online"
+        icon: "📖"
+        description: "Brilliant, Coursera, etc."
+      games:
+        name: "Games"
+        icon: "🎮"
+        description: "Xbox Game Pass, PlayStation Plus, etc."
+      cloud:
+        name: "Cloud/Storage"
+        icon: "☁️"
+        description: "iCloud, Google One, Dropbox, etc."
+      outros-assinaturas:
+        name: "Outros"
+        icon: "🔄"
+
+  # ============================================================================
+  # GASTOS VARIÁVEIS - Despesas do dia a dia
+  # ============================================================================
+  variaveis:
+    name: "Gastos Variáveis"
+    icon: "🛒"
+    color: "#F97316"
+    type: "variable"
+    description: "Despesas do dia a dia"
+    children:
+      alimentacao:
+        name: "Alimentação"
+        icon: "🍽️"
+        children:
+          supermercado:
+            name: "Supermercado"
+            icon: "🛒"
+          restaurantes:
+            name: "Restaurantes"
+            icon: "🍽️"
+          delivery:
+            name: "Delivery"
+            icon: "🛵"
+          padaria:
+            name: "Padaria/Café"
+            icon: "🥐"
+          acougue:
+            name: "Açougue"
+            icon: "🥩"
+          feira:
+            name: "Feira/Hortifruti"
+            icon: "🥬"
+
+      transporte:
+        name: "Transporte"
+        icon: "🚗"
+        children:
+          combustivel:
+            name: "Combustível"
+            icon: "⛽"
+          estacionamento:
+            name: "Estacionamento"
+            icon: "🅿️"
+          pedagio:
+            name: "Pedágio"
+            icon: "🛣️"
+          uber-99:
+            name: "Uber/99"
+            icon: "🚗"
+          manutencao-veiculo:
+            name: "Manutenção"
+            icon: "🔧"
+          seguro-veiculo:
+            name: "Seguro Veículo"
+            icon: "🛡️"
+          ipva:
+            name: "IPVA/Licenciamento"
+            icon: "📋"
+
+      pets:
+        name: "Pets"
+        icon: "🐕"
+        description: "Koda e Kuma (Shiba Inus)"
+        children:
+          racao:
+            name: "Ração"
+            icon: "🦴"
+          veterinario:
+            name: "Veterinário"
+            icon: "💉"
+          petshop:
+            name: "Petshop"
+            icon: "🛁"
+          acessorios-pet:
+            name: "Acessórios"
+            icon: "🎾"
+
+      saude-variavel:
+        name: "Saúde"
+        icon: "💊"
+        children:
+          farmacia:
+            name: "Farmácia"
+            icon: "💊"
+          consultas:
+            name: "Consultas"
+            icon: "🩺"
+          exames:
+            name: "Exames"
+            icon: "🔬"
+          academia:
+            name: "Academia"
+            icon: "💪"
+
+      beleza:
+        name: "Beleza"
+        icon: "💇"
+        children:
+          cabelereiro:
+            name: "Cabeleireiro/Barbearia"
+            icon: "💇"
+          cosmeticos:
+            name: "Cosméticos"
+            icon: "💄"
+          estetica:
+            name: "Estética"
+            icon: "✨"
+
+      vestuario:
+        name: "Vestuário"
+        icon: "👕"
+        children:
+          roupas:
+            name: "Roupas"
+            icon: "👕"
+          calcados:
+            name: "Calçados"
+            icon: "👟"
+          acessorios:
+            name: "Acessórios"
+            icon: "👜"
+
+      lazer:
+        name: "Lazer"
+        icon: "🎉"
+        children:
+          viagem:
+            name: "Viagem"
+            icon: "✈️"
+          cinema-teatro:
+            name: "Cinema/Teatro"
+            icon: "🎬"
+          eventos:
+            name: "Eventos"
+            icon: "🎫"
+          hobbies:
+            name: "Hobbies"
+            icon: "🎨"
+          bares:
+            name: "Bares"
+            icon: "🍺"
+
+      casa:
+        name: "Casa"
+        icon: "🏠"
+        children:
+          moveis:
+            name: "Móveis"
+            icon: "🛋️"
+          decoracao:
+            name: "Decoração"
+            icon: "🖼️"
+          eletrodomesticos:
+            name: "Eletrodomésticos"
+            icon: "🔌"
+          manutencao-casa:
+            name: "Manutenção"
+            icon: "🔨"
+          limpeza:
+            name: "Limpeza"
+            icon: "🧴"
+
+      tecnologia:
+        name: "Tecnologia"
+        icon: "💻"
+        children:
+          eletronicos:
+            name: "Eletrônicos"
+            icon: "📱"
+          software:
+            name: "Software"
+            icon: "💿"
+          jogos:
+            name: "Jogos"
+            icon: "🎮"
+
+      presentes:
+        name: "Presentes"
+        icon: "🎁"
+
+      educacao-variavel:
+        name: "Educação"
+        icon: "📚"
+        children:
+          livros:
+            name: "Livros"
+            icon: "📚"
+          cursos:
+            name: "Cursos"
+            icon: "🎓"
+          material-escolar:
+            name: "Material Escolar"
+            icon: "✏️"
+
+      taxas-bancarias:
+        name: "Taxas Bancárias"
+        icon: "🏦"
+        children:
+          iof:
+            name: "IOF"
+            icon: "🏦"
+          tarifas:
+            name: "Tarifas"
+            icon: "💸"
+          juros:
+            name: "Juros"
+            icon: "📊"
+
+      outros:
+        name: "Outros"
+        icon: "📦"
+
+  # ============================================================================
+  # CATEGORIAS DE SISTEMA
+  # ============================================================================
+  sistema:
+    name: "Sistema"
+    icon: "⚙️"
+    color: "#6B7280"
+    type: "system"
+    description: "Categorias automáticas do sistema"
+    hidden: true
+    children:
+      transferencia-interna:
+        name: "Transferência Interna"
+        icon: "🔄"
+        description: "Transferências entre contas próprias"
+        ignored: true
+      pagamento-cartao:
+        name: "Pagamento Cartão"
+        icon: "💳"
+        description: "Pagamento de fatura"
+        ignored: true
+      a-classificar:
+        name: "A Classificar"
+        icon: "❓"
+        description: "Transações pendentes de categorização"
+      saldo-anterior:
+        name: "Saldo Anterior"
+        icon: "📋"
+        ignored: true
+      estorno:
+        name: "Estorno/Crédito"
+        icon: "↩️"
+        description: "Devoluções e reembolsos"
+
+  # ============================================================================
+  # RENDA
+  # ============================================================================
+  renda:
+    name: "Renda"
+    icon: "💰"
+    color: "#22C55E"
+    type: "income"
+    description: "Entradas de dinheiro"
+    children:
+      salario:
+        name: "Salário"
+        icon: "💵"
+      freelance:
+        name: "Freelance"
+        icon: "💼"
+      aluguel-recebido:
+        name: "Aluguel Recebido"
+        icon: "🏠"
+      investimentos-rendimento:
+        name: "Rendimentos"
+        icon: "📈"
+      reembolso:
+        name: "Reembolso"
+        icon: "↩️"
+      outros-renda:
+        name: "Outros"
+        icon: "💰"
+
+# ============================================================================
+# CONFIGURAÇÕES DE ORÇAMENTO PADRÃO
+# ============================================================================
+default_budgets:
+  # Percentuais sugeridos do disponível para variáveis
+  alimentacao:
+    percent: 25
+    suggested_limit: 2500
+  transporte:
+    percent: 12
+    suggested_limit: 1200
+  pets:
+    percent: 5
+    suggested_limit: 500
+  saude-variavel:
+    percent: 4
+    suggested_limit: 400
+  beleza:
+    percent: 3
+    suggested_limit: 300
+  vestuario:
+    percent: 4
+    suggested_limit: 400
+  lazer:
+    percent: 6
+    suggested_limit: 600
+  casa:
+    percent: 3
+    suggested_limit: 300
+  tecnologia:
+    percent: 3
+    suggested_limit: 300

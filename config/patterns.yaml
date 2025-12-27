@@ -1,0 +1,856 @@
+# Padrões de Categorização do Sistema Finance
+# Este arquivo define regras para categorização automática de transações
+
+version: "1.0"
+
+# ============================================================================
+# PADRÕES DE RENDA
+# ============================================================================
+income_patterns:
+  salario:
+    patterns:
+      - pattern: "GABRIEL\\s+042"
+        match_type: "regex"
+        priority: 100
+        description: "PIX da empresa RCConsultech"
+      - pattern: "40952242000108"
+        match_type: "contains"
+        priority: 100
+        description: "CNPJ da empresa"
+
+  freelance:
+    patterns:
+      - pattern: "PPN TECNOLOGIA"
+        match_type: "contains"
+        priority: 90
+
+  # Padrões para NÃO considerar como renda
+  not_income:
+    patterns:
+      - pattern: "ESTORNO"
+        match_type: "contains"
+      - pattern: "DEVOLUCAO"
+        match_type: "contains"
+      - pattern: "CANCELAMENTO"
+        match_type: "contains"
+      - pattern: "GABRIEL LUCENA RAMOS"
+        match_type: "contains"
+        description: "Transferência própria para BTG"
+
+# ============================================================================
+# PADRÕES DE TRANSFERÊNCIA INTERNA (IGNORAR)
+# ============================================================================
+internal_transfer_patterns:
+  patterns:
+    - pattern: "PAGTO CARTAO CREDITO"
+      match_type: "contains"
+      priority: 100
+    - pattern: "PGTO DEBITO CONTA"
+      match_type: "contains"
+      priority: 100
+    - pattern: "PIX OPEN FINANCE"
+      match_type: "contains"
+      priority: 100
+      description: "Transferência para BTG"
+    - pattern: "GABRIEL LUCENA RAMOS"
+      match_type: "contains"
+      priority: 90
+      description: "Transferência entre contas próprias"
+    - pattern: "SALDO ANTERIOR"
+      match_type: "contains"
+      priority: 100
+
+# ============================================================================
+# CUSTOS FIXOS
+# ============================================================================
+fixed_patterns:
+  moradia-aluguel:
+    patterns:
+      - pattern: "PJBANK"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ALUGUEL"
+        match_type: "contains"
+        priority: 80
+
+  moradia-condominio:
+    patterns:
+      - pattern: "CONDOMINIO"
+        match_type: "contains"
+        priority: 90
+      - pattern: "COND\\."
+        match_type: "regex"
+        priority: 85
+
+  moradia-energia:
+    patterns:
+      - pattern: "NEOENERGIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CEB"
+        match_type: "equals"
+        priority: 90
+      - pattern: "ENERGIA"
+        match_type: "contains"
+        priority: 70
+
+  saude-plano-saude:
+    patterns:
+      - pattern: "CASSI"
+        match_type: "contains"
+        priority: 95
+      - pattern: "UNIMED"
+        match_type: "contains"
+        priority: 90
+      - pattern: "BRADESCO SAUDE"
+        match_type: "contains"
+        priority: 90
+      - pattern: "SULAMERICA"
+        match_type: "contains"
+        priority: 90
+
+  saude-seguro-vida:
+    patterns:
+      - pattern: "PRUDENT"
+        match_type: "contains"
+        priority: 95
+        description: "Prudential"
+      - pattern: "PRUDENTIAL"
+        match_type: "contains"
+        priority: 95
+
+  educacao-mensalidade:
+    patterns:
+      - pattern: "CEUB"
+        match_type: "contains"
+        priority: 95
+      - pattern: "UNICEUB"
+        match_type: "contains"
+        priority: 95
+
+  servicos-diarista:
+    patterns:
+      - pattern: "SEBASTIANA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DIARISTA"
+        match_type: "contains"
+        priority: 80
+
+  telecom-celular:
+    patterns:
+      - pattern: "VIVO"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CLARO"
+        match_type: "contains"
+        priority: 90
+      - pattern: "TIM"
+        match_type: "equals"
+        priority: 90
+      - pattern: "OI MOVEL"
+        match_type: "contains"
+        priority: 90
+
+# ============================================================================
+# CONSTRUÇÃO DE FUTURO
+# ============================================================================
+investment_patterns:
+  consorcio:
+    patterns:
+      - pattern: "CANOPUS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CONSORCIO"
+        match_type: "contains"
+        priority: 80
+
+  previdencia:
+    patterns:
+      - pattern: "ICATU"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BRASILPREV"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PREVIDENCIA"
+        match_type: "contains"
+        priority: 80
+
+# ============================================================================
+# ASSINATURAS
+# ============================================================================
+subscription_patterns:
+  streaming:
+    patterns:
+      - pattern: "NETFLIX"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DISNEY"
+        match_type: "contains"
+        priority: 95
+      - pattern: "AMAZON PRIME"
+        match_type: "contains"
+        priority: 95
+      - pattern: "AMAZON SERVICOS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "AMAZON AD FREE"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PRIME VIDEO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "HBO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PARAMOUNT"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CRUNCHYROLL"
+        match_type: "contains"
+        priority: 95
+      - pattern: "YOUTUBE PREMIUM"
+        match_type: "contains"
+        priority: 95
+
+  musica:
+    patterns:
+      - pattern: "SPOTIFY"
+        match_type: "contains"
+        priority: 95
+      - pattern: "APPLE MUSIC"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DEEZER"
+        match_type: "contains"
+        priority: 95
+      - pattern: "TIDAL"
+        match_type: "contains"
+        priority: 90
+
+  produtividade:
+    patterns:
+      - pattern: "ANTHROPIC"
+        match_type: "contains"
+        priority: 95
+        description: "Claude"
+      - pattern: "OPENAI"
+        match_type: "contains"
+        priority: 95
+      - pattern: "GITHUB"
+        match_type: "contains"
+        priority: 95
+      - pattern: "NOTION"
+        match_type: "contains"
+        priority: 95
+      - pattern: "FIGMA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "LINKEDIN"
+        match_type: "contains"
+        priority: 95
+      - pattern: "MIDJOURNEY"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CURSOR"
+        match_type: "contains"
+        priority: 90
+
+  educacao:
+    patterns:
+      - pattern: "BRILLIANT"
+        match_type: "contains"
+        priority: 95
+      - pattern: "COURSERA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "UDEMY"
+        match_type: "contains"
+        priority: 90
+      - pattern: "ALURA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "AUVP"
+        match_type: "contains"
+        priority: 95
+        description: "Curso de investimentos"
+
+  games:
+    patterns:
+      - pattern: "XBOX"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PLAYSTATION"
+        match_type: "contains"
+        priority: 95
+      - pattern: "NINTENDO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "STEAM"
+        match_type: "contains"
+        priority: 90
+
+  cloud:
+    patterns:
+      - pattern: "ICLOUD"
+        match_type: "contains"
+        priority: 95
+      - pattern: "GOOGLE ONE"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DROPBOX"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ONEDRIVE"
+        match_type: "contains"
+        priority: 90
+
+# ============================================================================
+# GASTOS VARIÁVEIS - ALIMENTAÇÃO
+# ============================================================================
+food_patterns:
+  supermercado:
+    patterns:
+      - pattern: "CARREFOUR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "EXTRA HIPER"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PAO DE ACUCAR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BIG BOX"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SUPER MAIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DONA AGUAS CLARAS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SUPERMERCADO"
+        match_type: "contains"
+        priority: 80
+
+  restaurantes:
+    patterns:
+      - pattern: "OUTBACK"
+        match_type: "contains"
+        priority: 95
+      - pattern: "MADERO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "COCO BAMBU"
+        match_type: "contains"
+        priority: 95
+      - pattern: "FOGO DE CHAO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "RESTAURANTE"
+        match_type: "contains"
+        priority: 70
+      - pattern: "PIZZARIA"
+        match_type: "contains"
+        priority: 85
+      - pattern: "BURGER"
+        match_type: "contains"
+        priority: 80
+      - pattern: "SUSHI"
+        match_type: "contains"
+        priority: 85
+      - pattern: "GRILL"
+        match_type: "contains"
+        priority: 70
+
+  delivery:
+    patterns:
+      - pattern: "IFOOD"
+        match_type: "contains"
+        priority: 95
+      - pattern: "RAPPI"
+        match_type: "contains"
+        priority: 95
+      - pattern: "UBER EATS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ZDELIVERY"
+        match_type: "contains"
+        priority: 95
+
+  padaria:
+    patterns:
+      - pattern: "STARBUCKS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PADARIA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "PANIFICADORA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CAFE"
+        match_type: "contains"
+        priority: 60
+      - pattern: "CONFEITARIA"
+        match_type: "contains"
+        priority: 85
+
+  acougue:
+    patterns:
+      - pattern: "CAMPERIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ACOUGUE"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CASA DE CARNES"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CHURRASCARIA"
+        match_type: "contains"
+        priority: 80
+        note: "Pode ser restaurante, verificar valor"
+
+# ============================================================================
+# GASTOS VARIÁVEIS - TRANSPORTE
+# ============================================================================
+transport_patterns:
+  combustivel:
+    patterns:
+      - pattern: "CASCOL"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SHELL"
+        match_type: "contains"
+        priority: 95
+      - pattern: "IPIRANGA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BR DISTRIBUIDORA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PETROBRAS"
+        match_type: "contains"
+        priority: 90
+      - pattern: "POSTO"
+        match_type: "contains"
+        priority: 80
+      - pattern: "COMBUSTIVEL"
+        match_type: "contains"
+        priority: 85
+      - pattern: "ABASTECE"
+        match_type: "contains"
+        priority: 80
+
+  estacionamento:
+    patterns:
+      - pattern: "ESTAPAR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ESTACIONAMENTO"
+        match_type: "contains"
+        priority: 90
+      - pattern: "PARKING"
+        match_type: "contains"
+        priority: 85
+      - pattern: "ZONA AZUL"
+        match_type: "contains"
+        priority: 90
+
+  pedagio:
+    patterns:
+      - pattern: "PEDAGIO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SEM PARAR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "VELOE"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CONECTCAR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "MOVE MAIS"
+        match_type: "contains"
+        priority: 95
+
+  uber-99:
+    patterns:
+      - pattern: "UBER"
+        match_type: "contains"
+        priority: 90
+        exclude:
+          - "UBER EATS"
+      - pattern: "99 TECNOLOGIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "99POP"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CABIFY"
+        match_type: "contains"
+        priority: 95
+
+  manutencao-veiculo:
+    patterns:
+      - pattern: "OFICINA"
+        match_type: "contains"
+        priority: 80
+      - pattern: "AUTOMOVEL"
+        match_type: "contains"
+        priority: 70
+      - pattern: "PNEU"
+        match_type: "contains"
+        priority: 85
+      - pattern: "FUNILARIA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "MECANICA"
+        match_type: "contains"
+        priority: 85
+      - pattern: "DPVAT"
+        match_type: "contains"
+        priority: 95
+
+# ============================================================================
+# GASTOS VARIÁVEIS - PETS
+# ============================================================================
+pet_patterns:
+  veterinario:
+    patterns:
+      - pattern: "SIVET"
+        match_type: "contains"
+        priority: 95
+      - pattern: "VETERINAR"
+        match_type: "contains"
+        priority: 90
+      - pattern: "PET CARE"
+        match_type: "contains"
+        priority: 85
+      - pattern: "CLINICA VET"
+        match_type: "contains"
+        priority: 90
+
+  petshop:
+    patterns:
+      - pattern: "PETSHOP"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PET SHOP"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PETZ"
+        match_type: "contains"
+        priority: 95
+      - pattern: "COBASI"
+        match_type: "contains"
+        priority: 95
+      - pattern: "ZEE DOG"
+        match_type: "contains"
+        priority: 90
+
+  racao:
+    patterns:
+      - pattern: "ROYAL CANIN"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PREMIER"
+        match_type: "contains"
+        priority: 80
+      - pattern: "GOLDEN"
+        match_type: "contains"
+        priority: 70
+
+# ============================================================================
+# GASTOS VARIÁVEIS - SAÚDE
+# ============================================================================
+health_patterns:
+  farmacia:
+    patterns:
+      - pattern: "DROGARIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DROGASIL"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DROGA RAIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "FARMACIA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "PAGUE MENOS"
+        match_type: "contains"
+        priority: 90
+      - pattern: "EXTRAFARMA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "PACHECO"
+        match_type: "contains"
+        priority: 90
+
+  academia:
+    patterns:
+      - pattern: "ACADEMIA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "SMARTFIT"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SMART FIT"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BLUEFIT"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BODYTECH"
+        match_type: "contains"
+        priority: 95
+
+# ============================================================================
+# GASTOS VARIÁVEIS - COMPRAS ONLINE
+# ============================================================================
+online_patterns:
+  amazon:
+    # Amazon tem múltiplos tipos - verificar com base no valor e contexto
+    patterns:
+      - pattern: "AMAZON PRIME CANAIS"
+        match_type: "contains"
+        priority: 100
+        category: "assinaturas-streaming"
+      - pattern: "AMAZON PRIME"
+        match_type: "contains"
+        priority: 95
+        category: "assinaturas-streaming"
+      - pattern: "AMAZON SERVICOS"
+        match_type: "contains"
+        priority: 95
+        category: "assinaturas-streaming"
+      - pattern: "AMAZON AD FREE"
+        match_type: "contains"
+        priority: 95
+        category: "assinaturas-streaming"
+      - pattern: "AMAZONMKTPLC"
+        match_type: "contains"
+        priority: 70
+        category: null
+        note: "Pode ser qualquer coisa - verificar manualmente"
+      - pattern: "AMAZON BR"
+        match_type: "contains"
+        priority: 70
+        category: null
+        note: "Produto - verificar categoria pelo valor"
+
+  marketplace:
+    patterns:
+      - pattern: "MERCADO LIVRE"
+        match_type: "contains"
+        priority: 80
+      - pattern: "MERCADOPAGO"
+        match_type: "contains"
+        priority: 70
+      - pattern: "SHOPEE"
+        match_type: "contains"
+        priority: 80
+      - pattern: "ALIEXPRESS"
+        match_type: "contains"
+        priority: 80
+      - pattern: "SHEIN"
+        match_type: "contains"
+        priority: 85
+        category: "variaveis-vestuario-roupas"
+
+  eletronicos:
+    patterns:
+      - pattern: "CASAS BAHIA"
+        match_type: "contains"
+        priority: 85
+      - pattern: "MAGAZINE LUIZA"
+        match_type: "contains"
+        priority: 85
+      - pattern: "MAGALU"
+        match_type: "contains"
+        priority: 85
+      - pattern: "AMERICANAS"
+        match_type: "contains"
+        priority: 80
+      - pattern: "KABUM"
+        match_type: "contains"
+        priority: 90
+        category: "variaveis-tecnologia-eletronicos"
+      - pattern: "PICHAU"
+        match_type: "contains"
+        priority: 90
+        category: "variaveis-tecnologia-eletronicos"
+
+# ============================================================================
+# GASTOS VARIÁVEIS - LAZER E VIAGEM
+# ============================================================================
+leisure_patterns:
+  viagem:
+    patterns:
+      - pattern: "HOTEL"
+        match_type: "contains"
+        priority: 85
+      - pattern: "POUSADA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "RESORT"
+        match_type: "contains"
+        priority: 90
+      - pattern: "NANNAI"
+        match_type: "contains"
+        priority: 95
+      - pattern: "AIRBNB"
+        match_type: "contains"
+        priority: 95
+      - pattern: "BOOKING"
+        match_type: "contains"
+        priority: 95
+      - pattern: "DECOLAR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "LATAM"
+        match_type: "contains"
+        priority: 90
+      - pattern: "GOL LINHAS"
+        match_type: "contains"
+        priority: 90
+      - pattern: "AZUL LINHAS"
+        match_type: "contains"
+        priority: 90
+      - pattern: "ABREUTUR"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CVC"
+        match_type: "contains"
+        priority: 90
+
+  cinema:
+    patterns:
+      - pattern: "CINEMARK"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CINEPOLIS"
+        match_type: "contains"
+        priority: 95
+      - pattern: "UCI"
+        match_type: "contains"
+        priority: 90
+      - pattern: "CINEMA"
+        match_type: "contains"
+        priority: 80
+
+  eventos:
+    patterns:
+      - pattern: "INGRESSO"
+        match_type: "contains"
+        priority: 80
+      - pattern: "TICKET"
+        match_type: "contains"
+        priority: 70
+      - pattern: "SYMPLA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "EVENTIM"
+        match_type: "contains"
+        priority: 95
+
+# ============================================================================
+# BELEZA E VESTUÁRIO
+# ============================================================================
+beauty_fashion_patterns:
+  cabelereiro:
+    patterns:
+      - pattern: "BARBEARIA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CABELEIREIRO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "SALAO"
+        match_type: "contains"
+        priority: 80
+
+  vestuario:
+    patterns:
+      - pattern: "ARAMIS"
+        match_type: "contains"
+        priority: 95
+        category: "variaveis-vestuario-roupas"
+      - pattern: "ZARA"
+        match_type: "contains"
+        priority: 95
+      - pattern: "RENNER"
+        match_type: "contains"
+        priority: 95
+      - pattern: "C&A"
+        match_type: "contains"
+        priority: 95
+      - pattern: "RIACHUELO"
+        match_type: "contains"
+        priority: 95
+      - pattern: "CENTAURO"
+        match_type: "contains"
+        priority: 90
+      - pattern: "NETSHOES"
+        match_type: "contains"
+        priority: 90
+        category: "variaveis-vestuario-calcados"
+      - pattern: "SPORTCICLE"
+        match_type: "contains"
+        priority: 90
+
+# ============================================================================
+# TAXAS E ENCARGOS
+# ============================================================================
+fee_patterns:
+  iof:
+    patterns:
+      - pattern: "IOF"
+        match_type: "contains"
+        priority: 95
+      - pattern: "IMPOSTO SOBRE OPERACOES"
+        match_type: "contains"
+        priority: 95
+
+  tarifas:
+    patterns:
+      - pattern: "TARIFA"
+        match_type: "contains"
+        priority: 90
+      - pattern: "ANUIDADE"
+        match_type: "contains"
+        priority: 95
+
+# ============================================================================
+# CONFIGURAÇÕES DE DETECÇÃO DE PARCELAS
+# ============================================================================
+installment_patterns:
+  regex_patterns:
+    - "PARC\\s+(\\d{2})/(\\d{2})"     # PARC 04/12
+    - "PARCELA\\s+(\\d+)\\s+DE\\s+(\\d+)"  # Parcela 4 de 12
+    - "(\\d+)/(\\d+)X"                # 4/12X
+
+# ============================================================================
+# CONFIGURAÇÕES DE DETECÇÃO DE ASSINATURAS
+# ============================================================================
+subscription_detection:
+  min_occurrences: 2        # Mínimo de vezes que deve aparecer
+  months_to_analyze: 3      # Quantos meses analisar
+  value_tolerance: 0.10     # Tolerância de 10% na variação de valor
+
+  # Valores típicos de assinaturas (para ajudar na detecção)
+  typical_ranges:
+    streaming:
+      min: 15
+      max: 100
+    musica:
+      min: 10
+      max: 50
+    produtividade:
+      min: 30
+      max: 700  # Claude Max é ~R$600
