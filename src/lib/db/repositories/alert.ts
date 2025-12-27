@@ -58,9 +58,11 @@ export class AlertRepository {
   ): Promise<Alert> {
     return prisma.alert.create({
       data: {
-        ...data,
+        type: data.type,
+        title: data.title,
+        message: data.message,
         userId,
-        data: data.data || {},
+        data: (data.data || {}) as Prisma.InputJsonValue,
         sentVia: data.sentVia || [],
       },
     });

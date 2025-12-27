@@ -18,10 +18,10 @@ export async function GET(request: NextRequest) {
     const month = searchParams.get('month');
     const categoryId = searchParams.get('categoryId');
     const type = searchParams.get('type');
-    const uncategorized = validateBoolean(searchParams.get('uncategorized'));
+    const uncategorized = validateBoolean(searchParams.get('uncategorized') || undefined);
     const { limit, offset } = validatePagination(
-      searchParams.get('limit'),
-      searchParams.get('offset')
+      searchParams.get('limit') || undefined,
+      searchParams.get('offset') || undefined
     );
 
     // Validate month if provided
@@ -77,9 +77,21 @@ export async function POST(request: NextRequest) {
       originalDesc: body.originalDescription || body.description,
       amount: body.amount,
       type: body.type || (body.amount >= 0 ? 'income' : 'expense'),
-      categoryId: body.categoryId || null,
-      accountId: body.accountId || null,
-      creditCardId: body.creditCardId || null,
+      ...(body.categoryId && {
+        category: {
+          connect: { id: body.categoryId },
+        },
+      }),
+      ...(body.accountId && {
+        account: {
+          connect: { id: body.accountId },
+        },
+      }),
+      ...(body.creditCardId && {
+        creditCard: {
+          connect: { id: body.creditCardId },
+        },
+      }),
       isRecurring: body.isRecurring || false,
       isIgnored: body.isIgnored || false,
       notes: body.notes || null,

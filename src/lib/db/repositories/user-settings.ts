@@ -4,7 +4,7 @@
  */
 
 import { prisma } from '@/lib/prisma';
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UserSettings } from '@/types/database';
 
 export class UserSettingsRepository {
@@ -68,7 +68,8 @@ export class UserSettingsRepository {
         },
         telegram: {
           enabled: false,
-          chatId: null,
+          budgetAlerts: true,
+          importReminders: true,
         },
       },
     };
