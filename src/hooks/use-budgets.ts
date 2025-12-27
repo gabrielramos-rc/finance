@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useToast } from './use-toast'
 
 interface Budget {
   id: string
@@ -60,15 +61,26 @@ async function updateBudget(
 }
 
 export function useBudgets(month: string) {
+  const { toast } = useToast()
+
   return useQuery({
     queryKey: ['budgets', month],
     queryFn: () => fetchBudgets(month),
     staleTime: 60 * 1000, // 1 minute
+    onError: (error) => {
+      console.error('Failed to fetch budgets:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao carregar orçamentos. Tente novamente.',
+        variant: 'destructive',
+      })
+    },
   })
 }
 
 export function useUpdateBudget() {
   const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   return useMutation({
     mutationFn: ({
@@ -88,6 +100,14 @@ export function useUpdateBudget() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+    onError: (error) => {
+      console.error('Failed to update budget:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao atualizar orçamento. Tente novamente.',
+        variant: 'destructive',
+      })
     },
   })
 }

@@ -84,7 +84,7 @@ export function RecentTransactions({ transactions }: RecentTransactionsProps) {
                     )}
                   </div>
                   <p className="text-xs text-zinc-500">
-                    <DateDisplay date={transaction.date} format="relative" />
+                    <DateDisplay date={transaction.date} formatType="relative" />
                   </p>
                 </div>
               </div>

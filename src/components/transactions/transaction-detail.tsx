@@ -14,6 +14,7 @@ import { CategoryPicker } from './category-picker'
 import { CurrencyDisplay } from '@/components/common/currency-display'
 import { DateDisplay } from '@/components/common/date-display'
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/hooks/use-toast'
 import { useState, useEffect } from 'react'
 
 interface Category {
@@ -60,6 +61,7 @@ export function TransactionDetail({
   )
   const [notes, setNotes] = useState(transaction?.notes || '')
   const [isSaving, setIsSaving] = useState(false)
+  const { toast } = useToast()
 
   // Update local state when transaction changes
   useEffect(() => {
@@ -78,9 +80,18 @@ export function TransactionDetail({
         categoryId: categoryId || undefined,
         notes: notes || undefined,
       })
+      toast({
+        title: 'Sucesso',
+        description: 'Transação atualizada com sucesso',
+      })
       onClose()
     } catch (error) {
       console.error('Failed to update transaction:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao atualizar transação. Tente novamente.',
+        variant: 'destructive',
+      })
     } finally {
       setIsSaving(false)
     }
@@ -104,7 +115,7 @@ export function TransactionDetail({
             <div>
               <Label className="text-zinc-400">Data</Label>
               <div className="mt-1 text-zinc-100">
-                <DateDisplay date={transaction.date} format="long" />
+                <DateDisplay date={transaction.date} formatType="long" />
               </div>
             </div>
             <div>

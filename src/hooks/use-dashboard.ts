@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { useToast } from './use-toast'
 
 interface DashboardData {
   period: {
@@ -74,10 +75,20 @@ async function fetchDashboard(month?: string): Promise<DashboardData> {
 }
 
 export function useDashboard(month?: string) {
+  const { toast } = useToast()
+
   return useQuery({
     queryKey: ['dashboard', month],
     queryFn: () => fetchDashboard(month),
     staleTime: 60 * 1000, // 1 minute
+    onError: (error) => {
+      console.error('Failed to fetch dashboard data:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao carregar dados do dashboard. Tente novamente.',
+        variant: 'destructive',
+      })
+    },
   })
 }
 

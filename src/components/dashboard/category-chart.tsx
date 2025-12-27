@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { EmptyState } from '@/components/common/empty-state'
 import { CurrencyDisplay } from '@/components/common/currency-display'
+import { formatCurrency } from '@/lib/utils'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
 import { useRouter } from 'next/navigation'
 import { PieChart as PieChartIcon } from 'lucide-react'
@@ -83,9 +84,7 @@ export function CategoryChart({ topCategories }: CategoryChartProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number) => (
-                <CurrencyDisplay value={-value} type="expense" />
-              )}
+              formatter={(value: number) => formatCurrency(-value)}
               contentStyle={{
                 backgroundColor: '#18181b',
                 border: '1px solid #27272a',

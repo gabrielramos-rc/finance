@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useToast } from './use-toast'
 
 interface Transaction {
   id: string
@@ -51,6 +52,7 @@ async function fetchTransactions(filters: TransactionFilters): Promise<Paginated
   if (filters.categoryId) params.append('categoryId', filters.categoryId)
   if (filters.type) params.append('type', filters.type)
   if (filters.uncategorized) params.append('uncategorized', 'true')
+  if (filters.search) params.append('search', filters.search)
   if (filters.limit) params.append('limit', String(filters.limit))
   if (filters.offset) params.append('offset', String(filters.offset))
 
@@ -93,15 +95,26 @@ async function categorizeTransaction(
 }
 
 export function useTransactions(filters: TransactionFilters) {
+  const { toast } = useToast()
+
   return useQuery({
     queryKey: ['transactions', filters],
     queryFn: () => fetchTransactions(filters),
     staleTime: 30 * 1000, // 30 seconds
+    onError: (error) => {
+      console.error('Failed to fetch transactions:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao carregar transações. Tente novamente.',
+        variant: 'destructive',
+      })
+    },
   })
 }
 
 export function useUpdateTransaction() {
   const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: { categoryId?: string; notes?: string } }) =>
@@ -110,11 +123,20 @@ export function useUpdateTransaction() {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
     },
+    onError: (error) => {
+      console.error('Failed to update transaction:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao atualizar transação. Tente novamente.',
+        variant: 'destructive',
+      })
+    },
   })
 }
 
 export function useCategorizeTransaction() {
   const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   return useMutation({
     mutationFn: ({
@@ -129,6 +151,14 @@ export function useCategorizeTransaction() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+    },
+    onError: (error) => {
+      console.error('Failed to categorize transaction:', error)
+      toast({
+        title: 'Erro',
+        description: 'Falha ao categorizar transação. Tente novamente.',
+        variant: 'destructive',
+      })
     },
   })
 }

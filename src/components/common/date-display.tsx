@@ -6,13 +6,13 @@ import { ptBR } from 'date-fns/locale'
 
 interface DateDisplayProps {
   date: Date | string
-  format?: 'short' | 'long' | 'relative'
+  formatType?: 'short' | 'long' | 'relative'
   className?: string
 }
 
 export function DateDisplay({
   date,
-  format: formatType = 'short',
+  formatType = 'short',
   className,
 }: DateDisplayProps) {
   const d = typeof date === 'string' ? new Date(date) : date

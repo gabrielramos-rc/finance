@@ -68,7 +68,7 @@ export function TransactionRow({
         className="px-4 py-3 cursor-pointer"
         onClick={handleClick}
       >
-        <DateDisplay date={transaction.date} format="short" />
+        <DateDisplay date={transaction.date} formatType="short" />
       </td>
       <td
         className="px-4 py-3 cursor-pointer min-w-0"

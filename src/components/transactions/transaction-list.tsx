@@ -155,6 +155,7 @@ export function TransactionList({
                       type="checkbox"
                       checked={allSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
+                      aria-label="Selecionar todas as transações"
                       className="h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-emerald-600 focus:ring-emerald-600"
                       ref={(input) => {
                         if (input) {
