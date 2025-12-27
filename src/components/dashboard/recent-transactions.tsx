@@ -7,19 +7,7 @@ import { DateDisplay } from '@/components/common/date-display'
 import { Badge } from '@/components/ui/badge'
 import { Receipt, ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-
-interface Transaction {
-  id: string
-  date: string
-  description: string
-  amount: number
-  type: 'income' | 'expense' | 'transfer'
-  category?: {
-    name: string
-    icon: string | null
-    color: string | null
-  } | null
-}
+import type { Transaction } from '@/types/transactions'
 
 interface RecentTransactionsProps {
   transactions: Transaction[]

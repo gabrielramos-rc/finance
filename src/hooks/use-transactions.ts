@@ -2,48 +2,11 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from './use-toast'
-
-interface Transaction {
-  id: string
-  date: string
-  description: string
-  originalDesc?: string
-  amount: number
-  type: 'income' | 'expense' | 'transfer'
-  category?: {
-    id: string
-    name: string
-    slug: string
-    icon: string | null
-    color: string | null
-    parent?: {
-      name: string
-      slug: string
-    } | null
-  } | null
-  notes?: string | null
-  metadata?: Record<string, unknown>
-}
-
-interface TransactionFilters {
-  month?: string
-  categoryId?: string
-  type?: 'income' | 'expense' | 'transfer'
-  uncategorized?: boolean
-  search?: string
-  limit?: number
-  offset?: number
-}
-
-interface PaginatedTransactions {
-  data: Transaction[]
-  pagination: {
-    total: number
-    limit: number
-    offset: number
-    hasMore: boolean
-  }
-}
+import type {
+  Transaction,
+  TransactionFilters,
+  PaginatedTransactions,
+} from '@/types/transactions'
 
 async function fetchTransactions(filters: TransactionFilters): Promise<PaginatedTransactions> {
   const params = new URLSearchParams()
@@ -95,20 +58,12 @@ async function categorizeTransaction(
 }
 
 export function useTransactions(filters: TransactionFilters) {
-  const { toast } = useToast()
-
   return useQuery({
     queryKey: ['transactions', filters],
     queryFn: () => fetchTransactions(filters),
     staleTime: 30 * 1000, // 30 seconds
-    onError: (error) => {
-      console.error('Failed to fetch transactions:', error)
-      toast({
-        title: 'Erro',
-        description: 'Falha ao carregar transações. Tente novamente.',
-        variant: 'destructive',
-      })
-    },
+    // Note: Error handling should be done in components using this hook
+    // React Query v5 removed onError from useQuery
   })
 }
 

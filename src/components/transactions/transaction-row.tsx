@@ -6,20 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Receipt } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-interface Transaction {
-  id: string
-  date: string
-  description: string
-  amount: number
-  type: 'income' | 'expense' | 'transfer'
-  category?: {
-    id: string
-    name: string
-    icon: string | null
-    color: string | null
-  } | null
-}
+import type { Transaction } from '@/types/transactions'
 
 interface TransactionRowProps {
   transaction: Transaction
@@ -39,6 +26,13 @@ export function TransactionRow({
   const handleClick = () => {
     if (onEdit) {
       onEdit(transaction.id)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.key === 'Enter' || e.key === ' ') && onEdit) {
+      e.preventDefault()
+      handleClick()
     }
   }
 
@@ -67,12 +61,19 @@ export function TransactionRow({
       <td
         className="px-4 py-3 cursor-pointer"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onEdit ? 0 : undefined}
+        role={onEdit ? 'button' : undefined}
+        aria-label={onEdit ? `Ver detalhes de ${transaction.description}` : undefined}
       >
         <DateDisplay date={transaction.date} formatType="short" />
       </td>
       <td
         className="px-4 py-3 cursor-pointer min-w-0"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onEdit ? 0 : undefined}
+        role={onEdit ? 'button' : undefined}
       >
         <div className="flex items-center gap-2">
           {transaction.category?.icon ? (
@@ -92,6 +93,9 @@ export function TransactionRow({
       <td
         className="px-4 py-3 cursor-pointer"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onEdit ? 0 : undefined}
+        role={onEdit ? 'button' : undefined}
       >
         {transaction.category ? (
           <Badge variant="secondary" className="text-xs">
@@ -106,6 +110,9 @@ export function TransactionRow({
       <td
         className="px-4 py-3 text-right cursor-pointer"
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onEdit ? 0 : undefined}
+        role={onEdit ? 'button' : undefined}
       >
         <CurrencyDisplay
           value={transaction.amount}

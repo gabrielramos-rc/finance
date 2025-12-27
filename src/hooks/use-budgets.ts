@@ -61,20 +61,12 @@ async function updateBudget(
 }
 
 export function useBudgets(month: string) {
-  const { toast } = useToast()
-
   return useQuery({
     queryKey: ['budgets', month],
     queryFn: () => fetchBudgets(month),
     staleTime: 60 * 1000, // 1 minute
-    onError: (error) => {
-      console.error('Failed to fetch budgets:', error)
-      toast({
-        title: 'Erro',
-        description: 'Falha ao carregar orçamentos. Tente novamente.',
-        variant: 'destructive',
-      })
-    },
+    // Note: Error handling should be done in components using this hook
+    // React Query v5 removed onError from useQuery
   })
 }
 

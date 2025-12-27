@@ -10,30 +10,8 @@ import { LoadingSkeleton } from '@/components/common/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Receipt, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  children?: Category[]
-}
-
-interface Transaction {
-  id: string
-  date: string
-  description: string
-  amount: number
-  type: 'income' | 'expense' | 'transfer'
-  category?: {
-    id: string
-    name: string
-    icon: string | null
-    color: string | null
-  } | null
-  notes?: string | null
-  metadata?: Record<string, unknown>
-}
+import type { Category } from '@/types/categories'
+import type { Transaction } from '@/types/transactions'
 
 interface TransactionListProps {
   transactions: Transaction[]

@@ -1,18 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { useToast } from './use-toast'
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  color: string | null
-  type: string
-  parentId: string | null
-  children?: Category[]
-}
+import type { Category } from '@/types/categories'
 
 interface CategoriesResponse {
   data: Category[]
@@ -27,20 +16,12 @@ async function fetchCategories(): Promise<CategoriesResponse> {
 }
 
 export function useCategories() {
-  const { toast } = useToast()
-
   return useQuery({
     queryKey: ['categories'],
     queryFn: fetchCategories,
     staleTime: 5 * 60 * 1000, // 5 minutes (categories don't change often)
-    onError: (error) => {
-      console.error('Failed to fetch categories:', error)
-      toast({
-        title: 'Erro',
-        description: 'Falha ao carregar categorias. Tente novamente.',
-        variant: 'destructive',
-      })
-    },
+    // Note: Error handling should be done in components using this hook
+    // React Query v5 removed onError from useQuery
   })
 }
 

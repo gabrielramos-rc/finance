@@ -2,14 +2,7 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useState, useEffect } from 'react'
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  children?: Category[]
-}
+import type { Category } from '@/types/categories'
 
 interface CategoryPickerProps {
   categories: Category[]

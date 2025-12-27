@@ -16,30 +16,8 @@ import { DateDisplay } from '@/components/common/date-display'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { useState, useEffect } from 'react'
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  children?: Category[]
-}
-
-interface Transaction {
-  id: string
-  date: string
-  description: string
-  originalDesc?: string
-  amount: number
-  type: 'income' | 'expense' | 'transfer'
-  category?: {
-    id: string
-    name: string
-    icon: string | null
-  } | null
-  notes?: string | null
-  metadata?: Record<string, unknown>
-}
+import type { Category } from '@/types/categories'
+import type { Transaction } from '@/types/transactions'
 
 interface TransactionDetailProps {
   transaction: Transaction | null

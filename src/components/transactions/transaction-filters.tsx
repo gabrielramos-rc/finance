@@ -6,14 +6,7 @@ import { MonthSelector } from '@/components/common/month-selector'
 import { CategoryPicker } from './category-picker'
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
-
-interface Category {
-  id: string
-  name: string
-  slug: string
-  icon: string | null
-  children?: Category[]
-}
+import type { Category } from '@/types/categories'
 
 interface TransactionFiltersProps {
   month: string

@@ -10,32 +10,20 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from 'lucide-react'
-
-interface DashboardData {
-  income: {
-    received: number
-    expected: number
-    percentOfExpected: number
-  }
-  expenses: {
-    total: number
-    fixed: number
-    variable: number
-    installments: number
-  }
-  balance: {
-    projected: number
-    current: number
-  }
-  budgets: {
-    total: number
-    used: number
-    remaining: number
-  }
-}
+import type {
+  DashboardIncome,
+  DashboardExpenses,
+  DashboardBalance,
+  DashboardBudgets,
+} from '@/types/dashboard'
 
 interface SummaryCardsProps {
-  data: DashboardData
+  data: {
+    income: DashboardIncome
+    expenses: DashboardExpenses
+    balance: DashboardBalance
+    budgets: DashboardBudgets
+  }
 }
 
 export function SummaryCards({ data }: SummaryCardsProps) {
