@@ -228,6 +228,48 @@ SUGESTÃO_INVESTIMENTO = saldo_conta
 7. **NUNCA** duplicar lógica de negócio (centralizar em lib/)
 8. **NUNCA** hardcodar valores que devem ser configuráveis
 
+## Variáveis de Ambiente
+
+### Obrigatórias para Produção (Vercel)
+
+| Variável | Descrição |
+|----------|-----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Chave pública do Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Chave secreta do Supabase (server-side) |
+| `DATABASE_URL` | Connection string PostgreSQL (com pooling) |
+| `DIRECT_URL` | Connection string direta (para migrations) |
+| `NEXTAUTH_SECRET` | Chave secreta para JWT/sessões (min 32 chars) |
+| `NEXTAUTH_URL` | URL da aplicação (`https://finance.rcconsultech.com`) |
+| `NEXT_PUBLIC_APP_URL` | URL pública da aplicação |
+
+### Opcionais (adicionar quando features estiverem prontas)
+
+| Variável | Descrição |
+|----------|-----------|
+| `TELEGRAM_BOT_TOKEN` | Token do bot Telegram para notificações |
+| `TELEGRAM_CHAT_ID` | ID do chat para receber alertas |
+| `RESEND_API_KEY` | API key do Resend para emails |
+| `EMAIL_FROM` | Endereço de envio (ex: `Finance <finance@rcconsultech.com>`) |
+| `UPSTASH_REDIS_REST_URL` | URL do Redis (rate limiting/cache) |
+| `UPSTASH_REDIS_REST_TOKEN` | Token do Redis |
+
+### Feature Flags
+
+| Variável | Descrição |
+|----------|-----------|
+| `FEATURE_TELEGRAM_NOTIFICATIONS` | Habilita notificações Telegram |
+| `FEATURE_EMAIL_REPORTS` | Habilita relatórios por email |
+| `FEATURE_INVESTMENT_SUGGESTIONS` | Habilita sugestões de investimento |
+
+### Apenas Desenvolvimento (NÃO adicionar no Vercel)
+
+| Variável | Descrição |
+|----------|-----------|
+| `NODE_ENV` | Vercel define automaticamente |
+| `DEBUG` | Ativa logs de debug |
+| `PRISMA_LOG_LEVEL` | Nível de log do Prisma (`query`, `info`, `warn`, `error`) |
+
 ## Comandos Úteis
 
 ```bash
