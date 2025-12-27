@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
     const user = await requireAuth();
     const { searchParams } = new URL(request.url);
 
-    const unreadOnly = validateBoolean(searchParams.get('unreadOnly'));
-    const { limit } = validatePagination(searchParams.get('limit'));
+    const unreadOnly = validateBoolean(searchParams.get('unreadOnly') || undefined);
+    const { limit } = validatePagination(searchParams.get('limit') || undefined);
 
     const alerts = await alertRepository.findMany(user.id, {
       unreadOnly,

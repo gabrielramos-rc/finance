@@ -45,7 +45,11 @@ export async function POST(request: NextRequest) {
       name: body.name,
       amount: body.amount,
       frequency: body.frequency,
-      categoryId: body.categoryId || null,
+      ...(body.categoryId && {
+        category: {
+          connect: { id: body.categoryId },
+        },
+      }),
       nextBillingDate: body.nextBillingDate ? new Date(body.nextBillingDate) : null,
       sharedWith: body.sharedWith || [],
       status: body.status || 'active',

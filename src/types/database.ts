@@ -13,7 +13,17 @@ export interface UserSettings {
   notificationEmail?: string;
   telegramChatId?: string;
 
-  // Configurações financeiras
+  // Configurações financeiras (nested structure for compatibility)
+  financial?: {
+    expectedIncome?: number;
+    minimumBalance?: number; // R$ 5.000 default
+    tithe?: {
+      enabled?: boolean;
+      percent?: number; // 0-10, progressivo
+    };
+  };
+
+  // Legacy flat structure (for backward compatibility)
   minimumBalance?: number; // R$ 5.000 default
   savingsReservePercent?: number; // % para reserva
   titheEnabled?: boolean;

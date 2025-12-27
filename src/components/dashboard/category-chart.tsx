@@ -7,7 +7,12 @@ import { formatCurrency } from '@/lib/utils'
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts'
 import { useRouter } from 'next/navigation'
 import { PieChart as PieChartIcon } from 'lucide-react'
-import type { CategoryData } from '@/types/categories'
+
+interface CategoryData {
+  category: string
+  amount: number
+  percentage: number
+}
 
 interface CategoryChartProps {
   topCategories: CategoryData[]
@@ -76,9 +81,10 @@ export function CategoryChart({ topCategories }: CategoryChartProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number | undefined) =>
-                value !== undefined ? formatCurrency(-value) : ''
-              }
+              formatter={(value: number | undefined) => {
+                if (value === undefined) return ''
+                return formatCurrency(-value)
+              }}
               contentStyle={{
                 backgroundColor: '#18181b',
                 border: '1px solid #27272a',
