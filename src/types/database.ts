@@ -176,3 +176,4 @@ export type AccountType = 'checking' | 'savings' | 'investment';
 
 export type SubscriptionFrequency = 'monthly' | 'annual';
 
+

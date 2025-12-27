@@ -10,8 +10,17 @@ const config: PrismaConfig = {
 
   migrate: {
     async url() {
-      return process.env.DIRECT_URL || process.env.DATABASE_URL || '';
+      // Use DIRECT_URL for migrations (direct connection)
+      // Fall back to DATABASE_URL if DIRECT_URL is not set
+      const url = process.env.DIRECT_URL || process.env.DATABASE_URL;
+      if (!url) {
+        throw new Error(
+          'DATABASE_URL or DIRECT_URL environment variable is required. Please set it in .env.local'
+        );
+      }
+      return url;
     },
+    seed: 'npx tsx prisma/seed.ts',
   },
 };
 
